@@ -1,0 +1,58 @@
+{
+  "execBoard": [
+    {
+      "position": "President",
+      "name": "Connor Ogilvie",
+      "image": "/exec-board/president.jpg",
+      "major": ""
+    },
+    {
+      "position": "Vice President",
+      "name": "Jojo Feng",
+      "image": "/exec-board/vice-president.jpg", 
+      "major": ""
+    },
+    {
+      "position": "Treasurer",
+      "name": "Jazmyn Koenst",
+      "image": "/exec-board/treasurer.jpg", 
+      "major": ""
+    },
+    {
+      "position": "Secretary",
+      "name": "Phat Lu",
+      "image": "/exec-board/secretary.jpg",
+      "major": ""
+    },
+    {
+      "position": "Public Relations",
+      "name": "Cooper Moore",
+      "image": "/exec-board/pr.jpg",
+      "major": ""
+    },
+    {
+      "position": "Advocacy",
+      "name": "Shreemayi Undavalli",
+      "image": "/exec-board/advocacy.jpg",
+      "major": ""
+    },
+    {
+      "position": "Volunteer Coordinator",
+      "name": "Gwendolyn Jones",
+      "image": "/exec-board/voco1.jpg",
+      "major": ""
+    },
+    {
+      "position": "Volunteer Coordinator",
+      "name": "Wyatt Bone",
+      "image": "/exec-board/voco2.jpg",
+      "major": ""
+    },
+    {
+      "position": "Social Officer",
+      "name": "Namita Reddy",
+      "image": "/exec-board/social.jpg",
+      "major": ""
+    }
+  ]
+}
