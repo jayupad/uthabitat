@@ -59,11 +59,11 @@ export default function Home() {
           <div className="md:col-span-6 px-2">
             <h1 className="text-2xl font-bold">Who We Are</h1>
             <p className="text-sm mb-4">
-              Founded in 1989, UT Habitat is the University of Texas at Austin Campus Chapter of Habitat for Humanity International...
+              Founded in 1989, UT Habitat is the University of Texas at Austin Campus Chapter of Habitat for Humanity International.
             </p>
             <h1 className="text-2xl font-bold">Our Mission</h1>
             <p className="text-sm mb-4">
-              Seeking to put God&#39;s love into action...
+              Seeking to spread love through action.
             </p>
             <h1 className="text-2xl font-bold">Our Vision</h1>
             <p className="text-sm mb-4">
