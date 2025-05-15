@@ -1,9 +1,50 @@
+"use client";
+
+
 import "../styles/default.css"
 import Image from "next/image";
+import { useEffect, useState } from "react";
 
 export default function About() {
+  const [imageUrl, setImageUrl] = useState<string | null>(null);
+  const [alt, setAlt] = useState<string | null>(null);
+
+  useEffect(() => {
+    const fetchImage = async () => {
+      try {
+        const sheetId = process.env.NEXT_PUBLIC_IMAGES_SHEET_ID;
+        const res = await fetch(`https://docs.google.com/spreadsheets/d/${sheetId}/gviz/tq?tqx=out:csv`);
+        const text = await res.text();
+
+        const row = text.split("\n")
+                        .filter(row => row.trim() !== "")
+                        .filter(row => row.includes("about-us"))
+        const imageUrl = row[0]
+                        .split(",")[1]
+                        .replace(/^"|"$/g, "")
+        const alt = row[0]
+                    .split(",")[2]
+                    .replace(/^"|"$/g, "")
+        console.log("Image URL:", imageUrl);
+        console.log("Alt Text:", alt);
+          
+        setImageUrl(`https://drive.google.com/uc?export=view&id=${imageUrl}`);
+        setAlt(alt);
+
+      } catch (error) {
+        console.error("Error fetching image URL:", error);
+      }
+    };
+
+    fetchImage();
+  }, []);
+
+  // if (!imageUrl) {
+  //   return <div>Loading...</div>;
+  // }
+
   return (
-    <div className='body-bg'>
+    <div>
       <br/>
       <div className='box-center'>
         <div className='grid grid-cols-1 md:grid-cols-12'>
@@ -25,8 +66,8 @@ export default function About() {
         </div>
         <div className='md:col-span-4 px-2'>
             <Image 
-              alt="Blue tote bag hanging on a fence with UT Habitat for Humanity written on it" 
-              src="/about-us-2.png"
+              alt={alt || "About Us Image"}
+              src={imageUrl || "/placeholder-image.jpg"}
               className="w-full h-auto"
               width={600}
               height={800}
@@ -34,7 +75,6 @@ export default function About() {
           </div>
         </div>
       </div>
-      <br/>
     </div>
   );
 }

@@ -14,7 +14,8 @@ export default function PasswordModal({ isOpen, onClose }: PasswordModalProps) {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (password === 'habitat') { // This should match the password in members/page.tsx
+    console.log(process.env.NEXT_PUBLIC_MEMBERS_PASSWORD as string)
+    if (password === (process.env.NEXT_PUBLIC_MEMBERS_PASSWORD as string)) {
       localStorage.setItem('authenticated', 'true');
       router.push('/members')
       setPassword('')

@@ -1,15 +1,50 @@
+"use client";
+
 import "../styles/default.css"
 import Image from "next/image";
+import { useEffect, useState } from "react";
+
 
 export default function Involved() {
+  const [imageUrl, setImageUrl] = useState<string | null>(null);
+  const [alt, setAlt] = useState<string | null>(null);
+
+  useEffect(() => {
+    const fetchImage = async () => {
+      try {
+        const sheetId = process.env.NEXT_PUBLIC_IMAGES_SHEET_ID;
+        const res = await fetch(`https://docs.google.com/spreadsheets/d/${sheetId}/gviz/tq?tqx=out:csv`);
+        const text = await res.text();
+
+        const row = text.split("\n")
+                        .filter(row => row.trim() !== "")
+                        .filter(row => row.includes("involved"))
+        const imageUrl = row[0]
+                        .split(",")[1]
+                        .replace(/^"|"$/g, "")
+        const alt = row[0]
+                    .split(",")[2]
+                    .replace(/^"|"$/g, "")
+          
+        setImageUrl(`https://drive.google.com/uc?export=view&id=${imageUrl}`);
+        setAlt(alt);
+
+      } catch (error) {
+        console.error("Error fetching image URL:", error);
+      }
+    };
+
+    fetchImage();
+  }, []);
+
     return (
       <div className='body-bg'>
         <br/>
         <div className='box-center'>
           <div className="relative w-full">
             <Image 
-              alt="Habitat members standing on the porch of a build site" 
-              src="/involved-1.png"
+              alt={alt || ""} 
+              src={imageUrl || "/placeholder-image.jpg"}
               height={300}
               width={1200}
               className="opacity-60 w-full h-auto object-cover"
@@ -57,17 +92,12 @@ export default function Involved() {
                 <li> <p> Pay your dues </p></li>
                 <li> <p> Sign up for the build on VolunteerHub with Austin Habitat </p></li>
                 <li> <p> Sign up for the build on the spreadsheet we send out through the newsletter or Slack </p></li>
-                <li> <p> Get a good night's rest and bring plenty of water for some fun building! </p></li>
+                <li> <p> Get a good night&#39;s rest and bring plenty of water for some fun building! </p></li>
               </ol>
             </div>
           </div>
-          <div className='grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-16'>
-            <div className='md:col-span-1 px-2'>
-            </div>
-            <div className='md:col-span-1 px-2'>
-            </div>
-          </div>
         </div>
+        <br/>
       </div>
     );
   }

@@ -16,12 +16,14 @@ export default function Dropdown(props: Props) {
         setOpen(!isOpen);
     }
 
-    const closeDropdown = () => {
-        setOpen(false);
-    }
+    const closeDropdown = () => { setOpen(false); }
+
+    const handleMouseLeave = () => { setOpen(false); }
+
+    const handleMouseEnter = () => { setOpen(true); }
 
     return (
-        <div className='w-full'>
+        <div className='w-full' onMouseEnter={handleMouseEnter}>
             <div className="relative inline-block">
                 <button
                     type="button"
@@ -33,7 +35,7 @@ export default function Dropdown(props: Props) {
                     </svg> */}
                 </button>
             {isOpen && (
-                    <div className="origin-top-right absolute right-0 mt-2 w-44 rounded-lg shadow-lg bg-white">
+                    <div className="origin-top-right absolute right-0 mt-2 w-44 rounded-lg shadow-lg bg-white" onMouseLeave={handleMouseLeave}>
                         <ul role="menu" aria-orientation="vertical" aria-labelledby="options-menu">
                         {props.dropdownList.map((item, index) => (
                             <li key={index}>

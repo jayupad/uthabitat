@@ -1,45 +1,84 @@
+"use client"
+
 import EmblaCarousel from "@/components/EmblaCarousel";
 import { EmblaOptionsType } from 'embla-carousel'
-import fs from 'fs'
 import './styles/base.css'
 import Image from 'next/image'
 import CustomCalendar from '../components/CustomCalendar'
+import { useEffect, useState } from "react";
 
 export default function Home() {
-  const SLIDES = fs.readdirSync('./public/home').map(file => `/home/${file}`)
+  const [slides, setSlides] = useState<{page: string, image: string, alt: string}[]>([]);
+  useEffect(() => {
+    async function fetchSlides() {
+      const res = await fetch(
+        `https://docs.google.com/spreadsheets/d/${process.env.NEXT_PUBLIC_IMAGES_SHEET_ID}/gviz/tq?tqx=out:csv`
+      );
+      // console.log(res)
+      const text = await res.text();
+      const rows = text.split("\n").filter(row => row.trim() !== "");
+      const data = rows.slice(1).map(row => {
+        const cols = row.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/);
+        return {
+          page: cols[0]?.replace(/^"|"$/g, ""),
+          image: `https://drive.google.com/uc?export=view&id=${cols[1]?.replace(/^"|"$/g, "")}`,
+          alt: cols[2]?.replace(/^"|"$/g, ""),
+        };
+      });
+      setSlides(data);
+    }
+    fetchSlides();
+  }, []);
+
   const OPTIONS: EmblaOptionsType = { loop: true }
-    
+
   return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-        <EmblaCarousel slides={SLIDES} options={OPTIONS}/>
-        <div className="grid grid-cols-1 md:grid-cols-12">
+    <div className="bg-white min-h-screen w-full overflow-x-hidden p-4 sm:p-8 pb-20 font-[family-name:var(--font-geist-sans)]">
+      <main className="flex flex-col gap-8 items-center sm:items-start max-w-screen-lg mx-auto w-full">
+        {/* Carousel */}
+        <div className="w-full overflow-hidden">
+          <EmblaCarousel slides={slides} options={OPTIONS} />
+        </div>
+
+        {/* Image + Text Section */}
+        <div className="grid grid-cols-1 md:grid-cols-12 gap-6 w-full">
+            <div className="md:col-span-6 px-2">
+            {slides
+              .filter(slide => slide.page === "home")
+              .map(slide => (
+              <Image 
+                key={slide.image}
+                alt={slide.alt}
+                src={slide.image}
+                className="w-full h-auto"
+                height={500}
+                width={400}
+              />
+              ))}
+            </div>
           <div className="md:col-span-6 px-2">
-            <Image 
-              alt="Image of wood beam in front of Texas Capitol, with the inscription [Built with love from UT Habitat]"
-              className="w-full h-auto"
-              src='/about-us.png' 
-              height={800}
-              width={400}/>
-          </div>
-          <div className="md:col-span-6 px-2">
-            <h1 className="text-2xl font-bold"> Who We Are </h1>
-            <p className='text-sm mb-2'>
-            Founded in 1989, UT Habitat is the University of Texas at Austin Campus Chapter of Habitat for Humanity International. We work directly with Austin Habitat for Humanity to build affordable housing in Central Texas. 
+            <h1 className="text-2xl font-bold">Who We Are</h1>
+            <p className="text-sm mb-4">
+              Founded in 1989, UT Habitat is the University of Texas at Austin Campus Chapter of Habitat for Humanity International...
             </p>
-            <br />
-            <h1 className="text-2xl font-bold"> Our Mission </h1>
-            <p className='text-sm mb-2'> Seeking to put God's love into action, UT Habitat brings people together to build Homes, Communities and Hope. </p>
-            <br />
-            <h1 className="text-2xl font-bold"> Our Vision </h1>
-            <p className='text-sm mb-2'> A world where everyone has a decent place to live. </p>
-            <br />
-            <h1 className="text-2xl font-bold"> Our Values </h1>
-            <p className='text-sm mb-2'> Forward Thinking | Collaborative | Service Oriented </p>
+            <h1 className="text-2xl font-bold">Our Mission</h1>
+            <p className="text-sm mb-4">
+              Seeking to put God&#39;s love into action...
+            </p>
+            <h1 className="text-2xl font-bold">Our Vision</h1>
+            <p className="text-sm mb-4">
+              A world where everyone has a decent place to live.
+            </p>
+            <h1 className="text-2xl font-bold">Our Values</h1>
+            <p className="text-sm">
+              Forward Thinking | Collaborative | Service Oriented
+            </p>
           </div>
         </div>
-        <div>
-        <CustomCalendar />
+
+        {/* Calendar */}
+        <div className="w-full overflow-hidden">
+          <CustomCalendar />
         </div>
       </main>
     </div>
