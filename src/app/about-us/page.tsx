@@ -47,10 +47,12 @@ export default function About() {
     <div>
       <br/>
       <div className='box-center'>
+        <br/>
         <div className='grid grid-cols-1 md:grid-cols-12'>
-        <div className='md:col-span-8 px-2'>
+        <div className='md:col-span-12 px-2 mb-[2%]'>
           <h1 className='text-4xl font-bold text-[#548c6c]'>About Us</h1>
-          <br/>
+        </div>
+        <div className='md:col-span-8 px-2'>
           <h3 className='text-base mb-2'>
             The Habitat for Humanity UT Campus Chapter works, helps, volunteers, and contributes solutions to the growing Austin housing crisis. 
             <br/>
