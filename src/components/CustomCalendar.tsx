@@ -116,6 +116,7 @@ export default function CustomCalendar() {
           // const displayTitle = isAllDay ? event.summary : `${start_time} ${event.summary}`
           const isMobile = window.innerWidth <= 768
           const displayTitle = isMobile ? '' : isAllDay ? event.summary : `${start_time} ${event.summary}`
+          console.log(displayTitle)
 
           return {
             title: displayTitle || 'Untitled Event',
