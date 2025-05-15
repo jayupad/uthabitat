@@ -77,7 +77,7 @@ export default function Home() {
         </div>
 
         {/* Calendar */}
-        <div className="w-full overflow-hidden">
+        <div className="w-full">
           <CustomCalendar />
         </div>
       </main>

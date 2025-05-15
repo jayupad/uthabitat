@@ -39,7 +39,7 @@ const EmblaCarousel: React.FC<PropType> = (props) => {
             {filteredSlides.map((slide, index) => (
               <div className="embla__slide" key={index}>
                 {/* Maintain aspect ratio container */}
-                <div className="relative w-full aspect-[5/4] overflow-hidden rounded-xl">
+                <div className="relative w-full aspect-[5/4] overflow-hidden">
                   <Image
                     src={slide.image}
                     alt={slide.alt}

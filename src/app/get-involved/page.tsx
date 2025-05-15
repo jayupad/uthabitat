@@ -41,21 +41,29 @@ export default function Involved() {
       <div className='body-bg'>
         <br/>
         <div className='box-center'>
-          <div className="relative w-full">
-            <Image 
-              alt={alt || ""} 
-              src={imageUrl || "/placeholder-image.jpg"}
-              height={300}
-              width={1200}
-              className="opacity-60 w-full h-auto object-cover"
-            />
-            <div className="absolute left-0 top-9/24 bg-[#548c6c] text-white px-4 sm:px-6 py-3 sm:py-4 shadow-lg max-w-[80%] sm:max-w-none">
-              <h1 className="text-xl sm:text-2xl font-bold">Get Involved</h1>
-              <p className="text-xs sm:text-sm">Join our mission to build homes</p>
+          <div className="relative w-full overflow-hidden">
+            <div className="aspect-[3/2] md:aspect-[3/1] relative">
+              <Image 
+                // alt={alt || ""} 
+                // src={imageUrl || "/placeholder-image.jpg"}
+                // height={300}
+                // width={1200}
+                // className="opacity-60 w-full h-auto object-cover"
+                  alt={alt || ""}
+                  src={imageUrl || "/placeholder-image.jpg"}
+                  fill
+                  sizes="(max-width: 640px) 100vw, 1200px"
+                  className="object-cover brightness-90 opacity-80" /* brightness ≈ opacity-60 but keeps text crisp */
+                  priority
+              />
+            </div>
+            <div className="absolute left-0 top-1/3 bg-[#548c6c]/90 text-white px-4 py-4 shadow-lg max-w-[80%] sm:max-w-none">
+              <h3 className="text-lg md:text-2xl font-bold">Get Involved</h3>
+              <p className="text-xs md:text-sm">Join our mission to build homes</p>
             </div>
           </div>
           <br />
-          <h2 className='text-lg involved-body'>For updates on our events, dates for our builds, or when and where our next meetings will be, please scroll down to sign up for our newsletter and join our Slack!</h2>
+          <h2 className='text-base md:text-lg involved-body'>For updates on our events, dates for our builds, or when and where our next meetings will be, please scroll down to sign up for our newsletter and join our Slack!</h2>
           <br />
           <div className='grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-16'>
             <div className='md:col-span-1 px-2'>

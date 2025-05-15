@@ -113,7 +113,9 @@ export default function CustomCalendar() {
           }).replace(/(AM|PM)/, match => match.toLowerCase()).replace(' ', '')
 
 
-          const displayTitle = isAllDay ? event.summary : `${start_time} ${event.summary}`
+          // const displayTitle = isAllDay ? event.summary : `${start_time} ${event.summary}`
+          const isMobile = window.innerWidth <= 768
+          const displayTitle = isMobile ? '' : isAllDay ? event.summary : `${start_time} ${event.summary}`
 
           return {
             title: displayTitle || 'Untitled Event',
@@ -142,7 +144,17 @@ export default function CustomCalendar() {
         startAccessor="start"
         endAccessor="end"
         views={['month']}
-        components={{ toolbar: CustomToolbar }}
+        components={{
+          toolbar: (props) => (
+        <CustomToolbar
+          {...props}
+          label={new Date(props.date).toLocaleDateString(undefined, {
+            month: 'short',
+            year: 'numeric',
+          })}
+        />
+          ),
+        }}
         onNavigate={onNav}
         date={currentDate}
         eventPropGetter={(event) => {
@@ -154,6 +166,21 @@ export default function CustomCalendar() {
             textOverflow: 'ellipsis',
             marginLeft: '4%',
             marginRight: '3%'
+          }
+
+          if (window.innerWidth <= 768) {
+            
+            return {
+              style: {
+              ...baseStyle,
+              borderRadius: '50%',
+              width: '8px',
+              height: '8px',
+              backgroundColor: '#8cba9f', // Tailwind green-700
+              marginLeft: 'auto',
+              marginRight: 6,
+              }
+            }
           }
         
           if (event.allDay) {
@@ -189,8 +216,9 @@ export default function CustomCalendar() {
           console.log(containerRect)
           const modalWidth = 320
           const modalHeight = 200
-          const vert_padding = 8
-          const horiz_padding = 80
+          const isMobile = window.innerWidth <= 768
+          const vert_padding = isMobile ? 0 : 8
+          const horiz_padding = isMobile ? 0 : 80
         
           const spaceBelow = containerRect.bottom - eventRect.bottom
           const spaceAbove = eventRect.top - containerRect.top
@@ -206,7 +234,7 @@ export default function CustomCalendar() {
           if (left + modalWidth > containerRect.width - horiz_padding) {
             left = containerRect.width - modalWidth - horiz_padding
           }
-
+          
           setSelectedEvent(event)
           setModalPos({ top, left, direction: shouldFlip ? 'up' : 'down' })
         }}
@@ -278,39 +306,44 @@ export default function CustomCalendar() {
 
 function CustomToolbar({ label, onNavigate }: ToolbarProps<EventType, object>) {
   return (
-    <div className="flex justify-between items-center px-4 mb-4">
-      <div className="w-16" />
-      <div className="flex items-center space-x-10">
-        <button
-          onClick={() => onNavigate('PREV')}
-          className="p-1 rounded hover:bg-gray-200"
-          aria-label="Previous"
-        >
-          <svg className="w-3 h-3 rotate-270 shrink-0" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
-            <path stroke="currentColor" strokeWidth="1" d="M9 5 5 1 1 5" />
-          </svg>
-        </button>
+    <div className="grid grid-cols-8 items-center mb-4">
+      <div className="col-span-2 flex justify-start">
+        <div className="w-4 md:w-16" />
 
-        <span className="text-xl font-semibold">{label}</span>
+      </div>
+      <div className="col-span-4 flex justify-center items-center space-x-5">
+      <button
+        onClick={() => onNavigate('PREV')}
+        className="p-1 rounded hover:bg-gray-200"
+        aria-label="Previous"
+      >
+        <svg className="w-3 h-3 rotate-270 shrink-0" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
+        <path stroke="currentColor" strokeWidth="1" d="M9 5 5 1 1 5" />
+        </svg>
+      </button>
 
+      <span className="text-base md:text-xl font-semibold">{label}</span>
+
+      <button
+        onClick={() => {
+        onNavigate('NEXT')
+        }}
+        className="p-1 rounded hover:bg-gray-200"
+        aria-label="Next"
+      >
+        <svg className="w-3 h-3 rotate-90 shrink-0" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
+        <path stroke="currentColor" strokeWidth="1" d="M9 5 5 1 1 5" />
+        </svg>
+      </button>
+      </div>
+      <div className="col-span-2 flex justify-end">
         <button
-          onClick={() => {
-            onNavigate('NEXT')
-          }}
-          className="p-1 rounded hover:bg-gray-200"
-          aria-label="Next"
+          onClick={() => onNavigate('TODAY')}
+          className="px-3 py-1 border border-green-800 text-green-800 rounded hover:bg-green-100"
         >
-          <svg className="w-3 h-3 rotate-90 shrink-0" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
-            <path stroke="currentColor" strokeWidth="1" d="M9 5 5 1 1 5" />
-          </svg>
+          Today
         </button>
       </div>
-      <button
-        onClick={() => onNavigate('TODAY')}
-        className="px-3 py-1 border border-green-800 text-green-800 rounded hover:bg-green-100"
-      >
-        Today
-      </button>
     </div>
   )
 }
