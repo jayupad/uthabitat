@@ -4,7 +4,7 @@ import Link from "next/link";
 import Dropdown from "./Dropdown";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import { useState, useRef } from 'react';
+import { useState } from 'react';
 import PasswordModal from './PasswordModal';
 
 export default function Header() {
@@ -12,7 +12,6 @@ export default function Header() {
   const about_hrefs = ["about-us", "get-involved", "exec-board", "faqs"]
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [isPasswordModalOpen, setIsPasswordModalOpen] = useState(false);
-  const [dropdownOpen, setDropdownOpen] = useState(false);
   const router = useRouter();
 
   const handleMemberClick = () => {

@@ -9,7 +9,7 @@ import { enUS } from 'date-fns/locale/en-US'
 import React, { useEffect, useState, useRef } from 'react'
 import 'react-big-calendar/lib/css/react-big-calendar.css'
 import '../app/styles/calendar.css'
-import { addMonths, set } from 'date-fns'
+import { addMonths } from 'date-fns'
 
 const locales = { 'en-US': enUS }
 const localizer = dateFnsLocalizer({ format, parse, startOfWeek, getDay, locales })
@@ -23,6 +23,21 @@ type EventType = {
   description?: string
   location?: string
   htmlLink: string
+}
+
+interface GoogleCalendarEvent {
+  summary?: string;
+  description?: string;
+  location?: string;
+  htmlLink: string;
+  start: {
+    date?: string;
+    dateTime?: string;
+  };
+  end: {
+    date?: string;
+    dateTime?: string;
+  };
 }
 
 const CALENDAR_ID = process.env.NEXT_PUBLIC_GOOGLE_CALENDAR_ID as string
@@ -81,11 +96,11 @@ export default function CustomCalendar() {
       const data = await res.json()
 
       const mappedEvents: EventType[] = data.items
-        .filter((event: any) => event.start && event.end)
-        .map((event: any) => {
+        .filter((event: GoogleCalendarEvent) => event.start && event.end)
+        .map((event: GoogleCalendarEvent) => {
           const isAllDay = !!event.start.date && !!event.end.date
           const start = new Date(event.start.dateTime || event.start.date || '')
-          let end = new Date(event.end.dateTime || event.end.date || '')
+          const end = new Date(event.end.dateTime || event.end.date || '')
 
           // Adjust all-day event end date (Google gives next day)
           if (isAllDay) {

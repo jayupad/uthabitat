@@ -11,7 +11,7 @@ export default function Contact() {
     <div className='body-bg min-h-screen'>
       <div className="pt-[2%] text-center max-w-2xl mx-auto px-4">
         <p className='text-white font-bold text-4xl'> Contact Us </p>
-          <p className='text-white text-lg mt-4'> Please fill out the form below and we'll get back to you ASAP! </p>
+          <p className='text-white text-lg mt-4'> Please fill out the form below and we&#39;ll get back to you ASAP! </p>
           
           <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
             <div className="space-y-4">
