@@ -5,10 +5,10 @@ import "../styles/default.css"
 import Image from "next/image";
 import { useEffect, useState } from "react";
 
-
 export default function AboutClient() {
   const [imageUrl, setImageUrl] = useState<string | null>(null);
   const [alt, setAlt] = useState<string | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     const fetchImage = async () => {
@@ -34,6 +34,7 @@ export default function AboutClient() {
           
         setImageUrl(`https://drive.google.com/uc?export=view&id=${imageUrl}`);
         setAlt(alt);
+        setIsLoading(false);
 
       } catch (error) {
         console.error("Error fetching image URL:", error);
@@ -44,6 +45,7 @@ export default function AboutClient() {
   }, []);
 
   return (
+
     <div>
       <br/>
       <div className='box-center'>
@@ -66,14 +68,18 @@ export default function AboutClient() {
             UT Habitat also regularly holds socials and fundraisers. We want all our members to get to know each other better get involved, and of course, have fun doing it!
           </h3>
         </div>
-        <div className='md:col-span-4 px-2'>
-            <Image 
-              alt={alt || "About Us Image"}
-              src={imageUrl || "/placeholder-image.jpg"}
-              className="w-full h-auto"
-              width={600}
-              height={800}
-            />
+          <div className="md:col-span-4 px-2">
+            {isLoading ? (
+              <div className="w-full h-[500px] bg-gray-200 animate-pulse rounded-lg" />
+            ) : (
+              <Image
+                alt={alt || "About Us Image"}
+                src={imageUrl || ""}
+                className="w-full h-auto"
+                width={600}
+                height={800}
+              />
+            )}
           </div>
         </div>
       </div>

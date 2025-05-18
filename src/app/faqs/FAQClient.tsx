@@ -6,6 +6,7 @@ import "../styles/default.css";
 export default function FAQClient() {
     const [faqs, setFaqs] = useState<{ question: string; answer: string }[]>([]);
     const [openIndex, setOpenIndex] = useState<number | null>(null);
+    const [isLoading, setIsLoading] = useState(true);
 
     useEffect(() => {
         async function fetchFAQ() {
@@ -28,6 +29,7 @@ export default function FAQClient() {
                 };
             });
             setFaqs(data);
+            setIsLoading(false);
         }
 
         fetchFAQ();
@@ -44,7 +46,11 @@ export default function FAQClient() {
                         </h3>
                     </div>
                 </div>
-                {faqs.map((faq, index) => (
+                {isLoading ? 
+                <div>
+                    <div className="absolute inset-0 bg-gray-200 animate-pulse rounded-lg" />
+                </div> :
+                faqs.map((faq, index) => (
                     <div className="pl-[4%]" key={index}>
                         <h2>
                             <button

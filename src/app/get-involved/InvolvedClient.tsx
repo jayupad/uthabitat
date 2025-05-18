@@ -7,6 +7,7 @@ import { useEffect, useState } from "react";
 export default function InvolvedClient() {
   const [imageUrl, setImageUrl] = useState<string | null>(null);
   const [alt, setAlt] = useState<string | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     const fetchImage = async () => {
@@ -32,6 +33,7 @@ export default function InvolvedClient() {
           
         setImageUrl(`https://drive.google.com/uc?export=view&id=${imageUrl}`);
         setAlt(alt);
+        setIsLoading(false); 
 
       } catch (error) {
         console.error("Error fetching image URL:", error);
@@ -47,6 +49,9 @@ export default function InvolvedClient() {
         <div className='box-center'>
           <div className="relative w-full overflow-hidden">
             <div className="aspect-[3/2] md:aspect-[3/1] relative">
+              {isLoading ? (
+                <div className="absolute inset-0 bg-gray-200 animate-pulse rounded-lg" />
+              ) : (
               <Image 
                   alt={alt || ""}
                   src={imageUrl || "/placeholder-image.jpg"}
@@ -55,6 +60,7 @@ export default function InvolvedClient() {
                   className="object-cover brightness-90 opacity-80" 
                   priority
               />
+              )}
             </div>
             <div className="absolute left-0 top-1/3 bg-[#548c6c]/90 text-white px-4 py-4 shadow-lg max-w-[80%] sm:max-w-none">
               <h3 className="text-lg md:text-2xl font-bold">Get Involved</h3>

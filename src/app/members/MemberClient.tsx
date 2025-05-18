@@ -5,6 +5,7 @@ import "../styles/default.css";
 
 export default function MemberClient() {
   const [memberSheetId, setMemberSheetId] = useState<string | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     const fetchSheet = async () => {
@@ -25,6 +26,7 @@ export default function MemberClient() {
           .split(",")[1]
           .replace(/^"|"$/g, "")
         setMemberSheetId(memberId);
+        setIsLoading(false);
 
       } catch (error) {
         console.error("Error fetching sheet URL:", error);
@@ -39,13 +41,17 @@ export default function MemberClient() {
     <div className='body-bg'>
       <br />
       <div className='box-center'>
+        {isLoading ? (
+          <div className="absolute inset-0 bg-gray-200 animate-pulse rounded-lg" />
+        ) : (
         <iframe
           src={`https://docs.google.com/spreadsheets/d/e/${memberSheetId}/pubhtml?widget=true&headers=false`}
           width="100%"
           height="600"
           style={{ border: 'none' }}
           title="Google Sheet"
-        />
+        /> )
+      }
       </div>
       <br />
     </div>

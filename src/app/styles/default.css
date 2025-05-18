@@ -11,6 +11,7 @@ body {
     min-width: 300px;
     box-sizing: border-box;
     box-shadow: var(--shadow-lg);
+    filter: drop-shadow(var(--drop-shadow-lg));
 }
 
 .box-center-faq {
@@ -22,6 +23,7 @@ body {
     min-width: 300px;
     box-sizing: border-box;
     box-shadow: var(--shadow-lg);
+    filter: drop-shadow(var(--drop-shadow-lg));
 }
 
 .no-box-center {
