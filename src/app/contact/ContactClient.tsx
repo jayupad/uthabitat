@@ -31,7 +31,7 @@ export default function ContactClient() {
       } else {
         setError(data?.error || 'An error occurred. Please try again.');
       }
-    } catch (err) {
+    } catch {
       setError('Failed to submit form.');
     } finally {
       setSubmitting(false);

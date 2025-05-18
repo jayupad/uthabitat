@@ -29,7 +29,7 @@ export default function PasswordModal({ isOpen, onClose }: PasswordModalProps) {
         alert('Incorrect password');
         setPassword('');
       }
-    } catch (err) {
+    } catch {
       alert('Something went wrong');
     }
   };

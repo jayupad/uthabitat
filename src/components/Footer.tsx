@@ -32,7 +32,7 @@ export default function Footer() {
       } else {
         setError(data?.error || 'Something went wrong. Please try again.');
       }
-    } catch (err) {
+    } catch {
       setError('Failed to submit form.');
     } finally {
       setSubmitting(false);
