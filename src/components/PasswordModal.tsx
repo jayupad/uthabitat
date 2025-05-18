@@ -12,18 +12,25 @@ export default function PasswordModal({ isOpen, onClose }: PasswordModalProps) {
 
   if (!isOpen) return null;
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log(process.env.NEXT_PUBLIC_MEMBERS_PASSWORD as string)
-    if (password === (process.env.NEXT_PUBLIC_MEMBERS_PASSWORD as string)) {
-      localStorage.setItem('authenticated', 'true');
-      router.push('/members')
-      setPassword('')
-      onClose()
-    } else {
-      setPassword('')
-      localStorage.removeItem('authenticated');
-      alert('Incorrect password');
+    try {
+      const res = await fetch('/api/secrets/member-auth', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ password }),
+      });
+
+      if (res.ok) {
+        router.push('/members');
+        setPassword('');
+        onClose();
+      } else {
+        alert('Incorrect password');
+        setPassword('');
+      }
+    } catch (err) {
+      alert('Something went wrong');
     }
   };
 

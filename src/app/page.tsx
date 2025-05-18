@@ -11,10 +11,15 @@ export default function Home() {
   const [slides, setSlides] = useState<{page: string, image: string, alt: string}[]>([]);
   useEffect(() => {
     async function fetchSlides() {
+      const secret = await fetch('/api/secrets/other-sheet');
+      const { dataSheetId } = await secret.json();
+      if (!dataSheetId) {
+        console.error("Sheet ID not found");
+        return;
+      }
       const res = await fetch(
-        `https://docs.google.com/spreadsheets/d/${process.env.NEXT_PUBLIC_IMAGES_SHEET_ID}/gviz/tq?tqx=out:csv`
+        `https://docs.google.com/spreadsheets/d/${dataSheetId}/gviz/tq?tqx=out:csv`
       );
-      // console.log(res)
       const text = await res.text();
       const rows = text.split("\n").filter(row => row.trim() !== "");
       const data = rows.slice(1).map(row => {
@@ -57,19 +62,19 @@ export default function Home() {
               ))}
             </div>
           <div className="md:col-span-6 px-2">
-            <h1 className="text-2xl font-bold">Who We Are</h1>
+            <h1 className="text-2xl text-[#548c6c] font-bold">Who We Are</h1>
             <p className="text-sm mb-4">
               Founded in 1989, UT Habitat is the University of Texas at Austin Campus Chapter of Habitat for Humanity International.
             </p>
-            <h1 className="text-2xl font-bold">Our Mission</h1>
+            <h1 className="text-2xl text-[#548c6c] font-bold">Our Mission</h1>
             <p className="text-sm mb-4">
               Seeking to spread love through action.
             </p>
-            <h1 className="text-2xl font-bold">Our Vision</h1>
+            <h1 className="text-2xl text-[#548c6c] font-bold">Our Vision</h1>
             <p className="text-sm mb-4">
               A world where everyone has a decent place to live.
             </p>
-            <h1 className="text-2xl font-bold">Our Values</h1>
+            <h1 className="text-2xl text-[#548c6c] font-bold">Our Values</h1>
             <p className="text-sm">
               Forward Thinking | Collaborative | Service Oriented
             </p>

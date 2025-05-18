@@ -14,13 +14,25 @@ export default function Header() {
   const [isPasswordModalOpen, setIsPasswordModalOpen] = useState(false);
   const router = useRouter();
 
-  const handleMemberClick = () => {
-    if (localStorage.getItem("authenticated")) {
-      router.push('/members')
-    } else {
-      setIsPasswordModalOpen(true)
+  const handleMemberClick = async () => {
+    try {
+      const res = await fetch('/api/secrets/check-auth', {
+        method: 'GET',
+        credentials: 'include',
+      });
+      const { authenticated } = await res.json();
+
+      if (authenticated) {
+        router.push('/members');
+      } else {
+        setIsPasswordModalOpen(true);
+      }
+    } catch (error) {
+      console.error("Auth check failed:", error);
+      setIsPasswordModalOpen(true); // fallback to modal
     }
-  }
+  };
+
 
   return (
     <header className="bg-white shadow-md sticky top-0 z-50">
@@ -55,17 +67,17 @@ export default function Header() {
           className="md:hidden text-gray-700"
           onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
         >
-        {mobileMenuOpen ? (
-          // Close Icon SVG
-          <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-          </svg>
-        ) : (
-          // Hamburger Icon SVG
-          <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
-          </svg>
-        )}
+          {mobileMenuOpen ? (
+            // Close Icon SVG
+            <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+            </svg>
+          ) : (
+            // Hamburger Icon SVG
+            <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+            </svg>
+          )}
         </button>
 
         {/* Mobile Nav Sidebar */}

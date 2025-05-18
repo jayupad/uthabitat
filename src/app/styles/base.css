@@ -66,9 +66,3 @@
     --admonition-warning-rgb-value: 253, 186, 116;
     --admonition-danger-rgb-value: 220, 38, 38;
   }
-  
-  h1 {
-    /* font-size: 34px; */
-    color: #548c6c;
-    /* font-weight: bold; */
-}

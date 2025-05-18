@@ -1,11 +1,43 @@
 'use client'
 
 import Image from "next/image";
-import { useForm, ValidationError } from '@formspree/react';
+import { useState } from "react";
 
 export default function Footer() {
-  const form_spree_endpoint = process.env.NEXT_PUBLIC_FORMSPREE_ENDPOINT as string;
-  const [state, handleSubmit] = useForm(form_spree_endpoint);
+  const [email, setEmail] = useState('');
+  const [submitting, setSubmitting] = useState(false);
+  const [succeeded, setSucceeded] = useState(false);
+  const [error, setError] = useState('');
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setSubmitting(true);
+    setError('');
+
+    try {
+      const res = await fetch('/api/secrets/formspree', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          email,
+          message: 'Newsletter Subscription Request',
+        }),
+      });
+
+      const data = await res.json();
+
+      if (res.ok) {
+        setSucceeded(true);
+        setEmail('');
+      } else {
+        setError(data?.error || 'Something went wrong. Please try again.');
+      }
+    } catch (err) {
+      setError('Failed to submit form.');
+    } finally {
+      setSubmitting(false);
+    }
+  };
 
   return (
     <footer className="bg-gray-500 text-white px-4 pt-8 pb-4">
@@ -15,7 +47,7 @@ export default function Footer() {
         <div className="flex flex-col items-center md:items-start w-full md:w-1/2 mb-6 md:mb-0">
           <p className="text-lg md:text-xl font-medium mb-2">Join our email newsletter!</p>
           
-          {state.succeeded ? (
+          {succeeded ? (
             <p className="text-green-200 mt-2">Thanks for subscribing!</p>
           ) : (
             <form onSubmit={handleSubmit} className="flex w-full max-w-md">
@@ -25,19 +57,20 @@ export default function Footer() {
                 name="email"
                 required
                 placeholder="Enter Email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
                 className="w-full px-4 py-2 text-black bg-white"
               />
-              <input type="hidden" name="message" value="Newsletter Subscription Request" />
               <button
                 type="submit"
-                disabled={state.submitting}
+                disabled={submitting}
                 className="bg-cyan-500 hover:bg-cyan-600 px-4 py-2 text-white font-semibold border border-white"
               >
-                Subscribe
+                {submitting ? 'Sending...' : 'Subscribe'}
               </button>
             </form>
           )}
-          <ValidationError prefix="Email" field="email" errors={state.errors} />
+          {error && <p className="text-red-300 text-sm mt-2">{error}</p>}
         </div>
 
         {/* Social Section */}

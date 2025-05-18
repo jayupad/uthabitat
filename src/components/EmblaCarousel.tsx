@@ -2,7 +2,6 @@
 
 import React from 'react'
 import { EmblaOptionsType } from 'embla-carousel'
-// import { DotButton, useDotButton } from '@/components/EmblaCarouselDotButton'
 import useEmblaCarousel from 'embla-carousel-react'
 import Autoplay from 'embla-carousel-autoplay'
 import ClassNames from 'embla-carousel-class-names'
@@ -24,11 +23,7 @@ type PropType = {
 const EmblaCarousel: React.FC<PropType> = (props) => {
   const { slides, options } = props
   const filteredSlides = slides.filter((slide) => slide.page === 'carousel')
-  // console.log('slides', slides)
-  const [emblaRef /*, emblaApi */] = useEmblaCarousel(options, [Autoplay(), ClassNames()])
-
-  // const { selectedIndex, scrollSnaps, onDotButtonClick } =
-  //   useDotButton(emblaApi)
+  const [emblaRef] = useEmblaCarousel(options, [Autoplay(), ClassNames()])
 
   return (
 
@@ -38,7 +33,6 @@ const EmblaCarousel: React.FC<PropType> = (props) => {
           <div className="embla__container">
             {filteredSlides.map((slide, index) => (
               <div className="embla__slide" key={index}>
-                {/* Maintain aspect ratio container */}
                 <div className="relative w-full aspect-[5/4] overflow-hidden">
                   <Image
                     src={slide.image}

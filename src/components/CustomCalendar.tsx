@@ -40,13 +40,6 @@ interface GoogleCalendarEvent {
   };
 }
 
-const CALENDAR_ID = process.env.NEXT_PUBLIC_GOOGLE_CALENDAR_ID as string
-const API_KEY = process.env.NEXT_PUBLIC_GOOGLE_CALENDAR_API_KEY as string
-
-if (!CALENDAR_ID || !API_KEY) {
-  throw new Error('Missing required environment variables for Google Calendar')
-}
-
 const now = new Date()
 const startOfLastYear = new Date(now.getFullYear() - 1, 0, 1)
 const endOfThisYear = new Date(now.getFullYear() + 1, 11, 31, 23, 59, 59)
@@ -62,6 +55,7 @@ export default function CustomCalendar() {
   const calendarRef = useRef<HTMLDivElement>(null)
   const [currentDate, setCurrentDate] = useState(new Date())
   
+
   const onNav = (newDate: Date, action: string) => {
     switch (action) {
       case 'NEXT':
@@ -83,15 +77,20 @@ export default function CustomCalendar() {
 
   useEffect(() => {
     const fetchEvents = async () => {
+      const secrets = await fetch('/api/secrets/calendar')
+      const { calendarId, apiKey } = await secrets.json()
+      if (!calendarId || !apiKey) {
+        throw new Error('Missing required environment variables for Google Calendar')
+      }
       const params = new URLSearchParams({
-        key: API_KEY,
+        key: apiKey,
         timeMin: startOfLastYear.toISOString(),
         timeMax: endOfThisYear.toISOString(),
         singleEvents: 'true',
         orderBy: 'startTime',
       })
       const res = await fetch(
-        `https://www.googleapis.com/calendar/v3/calendars/${CALENDAR_ID}/events?${params}`
+        `https://www.googleapis.com/calendar/v3/calendars/${calendarId}/events?${params}`
       )
       const data = await res.json()
 
@@ -112,11 +111,8 @@ export default function CustomCalendar() {
             hour12: true, 
           }).replace(/(AM|PM)/, match => match.toLowerCase()).replace(' ', '')
 
-
-          // const displayTitle = isAllDay ? event.summary : `${start_time} ${event.summary}`
           const isMobile = window.innerWidth <= 768
           const displayTitle = isMobile ? '' : isAllDay ? event.summary : `${start_time} ${event.summary}`
-          console.log(displayTitle)
 
           return {
             title: displayTitle || 'Untitled Event',
@@ -129,7 +125,6 @@ export default function CustomCalendar() {
             htmlLink: event.htmlLink
           }
         })
-      // console.log(mappedEvents)
       setEvents(mappedEvents)
     }
 
@@ -213,8 +208,6 @@ export default function CustomCalendar() {
         
           const eventRect = (e.target as HTMLElement).getBoundingClientRect()
           const containerRect = calendarRef.current.getBoundingClientRect()
-          console.log(eventRect)
-          console.log(containerRect)
           const modalWidth = 320
           const modalHeight = 200
           const isMobile = window.innerWidth <= 768
