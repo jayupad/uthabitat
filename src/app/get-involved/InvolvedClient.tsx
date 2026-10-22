@@ -81,7 +81,7 @@ export default function InvolvedClient() {
                 <li> <p> <b> Pay dues </b> (at a meeting or before a workday) </p> 
                   <ul className="list-disc pl-6 mt-2 space-y-1 text-lg">
                     <li className='text-sm'> $35 for a semester </li>
-                    <li className='text-sm'> $50 for the year </li>
+                    <li className='text-sm'> $55 for the year </li>
                     <li className='text-sm'> Both options include a UT Habitat shirt! </li>
                   </ul>
                 </li>
